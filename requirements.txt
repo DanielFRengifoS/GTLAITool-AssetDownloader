@@ -1,0 +1,4 @@
+httpx>=0.27,<1
+Pillow>=10.0,<13
+gallery-dl @ https://codeberg.org/mikf/gallery-dl/archive/master.tar.gz
+pyinstaller>=6.0,<7

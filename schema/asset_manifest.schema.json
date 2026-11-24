@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gtl-ai.example/schemas/asset-manifest-v1.json",
+  "title": "GTL AI Asset Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "assets"
+  ],
+  "properties": {
+    "profile_discovery": {
+      "type": "object",
+      "description": "Optional publication discovery provenance exported by the desktop application. Transient preview URLs are excluded."
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "job_id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{0,79}$"
+    },
+    "assets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "asset_id",
+          "source_type"
+        ],
+        "properties": {
+          "asset_id": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{0,79}$"
+          },
+          "source_type": {
+            "enum": [
+              "instagram",
+              "direct_url"
+            ]
+          },
+          "profile_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "post_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "shortcode": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]+$"
+          },
+          "publication_type": {
+            "enum": [
+              "post",
+              "reel",
+              "tv"
+            ]
+          },
+          "media_index": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "media_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "media_type": {
+            "enum": [
+              "auto",
+              "image",
+              "video"
+            ]
+          },
+          "source_page_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "referer_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "rights_status": {
+            "enum": [
+              "authorized",
+              "licensed",
+              "public_domain",
+              "unknown",
+              "restricted"
+            ]
+          },
+          "rights_notes": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "source_type": {
+                  "const": "instagram"
+                }
+              }
+            },
+            "then": {
+              "anyOf": [
+                {
+                  "required": [
+                    "post_url"
+                  ]
+                },
+                {
+                  "required": [
+                    "profile_url",
+                    "shortcode"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "source_type": {
+                  "const": "direct_url"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "media_url"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

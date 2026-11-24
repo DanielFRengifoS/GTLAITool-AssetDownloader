@@ -1,0 +1,47 @@
+name: Build Asset Downloader for Windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          architecture: "x64"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir --upgrade --force-reinstall -r requirements.txt
+          python -m pip show gallery-dl
+          echo gallery-dl source: https://codeberg.org/mikf/gallery-dl/archive/master.tar.gz
+      - name: Build standalone application
+        shell: pwsh
+        run: |
+          python -m unittest discover -s tests -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          pyinstaller --noconfirm --clean --onefile --windowed `
+            --name "Asset Downloader" `
+            --distpath "dist" `
+            --workpath "build" `
+            --specpath "build" `
+            --icon "$($env:GITHUB_WORKSPACE)\assets\GTL_AI_Asset_Downloader.ico" `
+            --add-data "$($env:GITHUB_WORKSPACE)\assets;assets" `
+            --collect-all gallery_dl `
+            --collect-all requests `
+            --collect-all certifi `
+            --collect-all PIL `
+            --hidden-import gallery_dl.__main__ `
+            --hidden-import httpx `
+            main.py
+      - name: Upload Windows EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: Asset-Downloader-Windows-x64
+          path: dist/Asset Downloader.exe
+          if-no-files-found: error

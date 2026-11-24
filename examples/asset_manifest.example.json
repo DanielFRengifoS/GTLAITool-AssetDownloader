@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "job_id": "sample-asset-job",
+  "assets": [
+    {
+      "asset_id": "sample-instagram-001",
+      "source_type": "instagram",
+      "profile_url": "https://www.instagram.com/example_artist/",
+      "post_url": "https://www.instagram.com/p/REPLACE_WITH_REAL_SHORTCODE/",
+      "media_type": "auto",
+      "media_index": 2,
+      "rights_status": "unknown",
+      "notes": "Example only. Replace with a real, publicly accessible publication URL."
+    },
+    {
+      "asset_id": "sample-direct-001",
+      "source_type": "direct_url",
+      "media_url": "https://example.com/path/to/replace-with-real-image.jpg",
+      "media_type": "image",
+      "source_page_url": "https://example.com/source-page",
+      "rights_status": "unknown",
+      "notes": "Example only. Replace with the actual direct media URL."
+    }
+  ]
+}
